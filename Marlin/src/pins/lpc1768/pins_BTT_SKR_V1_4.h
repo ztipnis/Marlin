@@ -263,7 +263,6 @@
     #define LCD_PINS_ENABLE                P1_23
     #define LCD_PINS_D4                    P1_21
 
-<<<<<<< HEAD
   #elif ENABLED(ENDER2_STOCKDISPLAY)
 
     /** Creality Ender-2 display pinout
@@ -343,33 +342,6 @@
       #define LCD_PINS_ENABLE                P1_18
       #define LCD_PINS_D4                    P1_20  
     #endif
-
-=======
-  #else
-    #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
-      #define LCD_PINS_ENABLE                P1_23
-      #define LCD_PINS_RS                    P1_22
-      
-      #define LCD_PINS_D4                    P1_21
-      #define BTN_EN2                        P1_20
-      
-      #define LCD_RESET_PIN                  P1_19                         
-      #define BTN_EN1                        P1_18  // (31) J3-2 & AUX-4
-
-      #define BTN_ENC                        P0_28
-    
-    #else
-      #define BTN_ENC                        P0_28  // (58) open-drain
-      #define LCD_PINS_RS                    P1_19
-
-      #define BTN_EN1                        P3_26  // (31) J3-2 & AUX-4
-      #define BTN_EN2                        P3_25  // (33) J3-4 & AUX-4
-
-      #define LCD_PINS_ENABLE                P1_18
-      #define LCD_PINS_D4                    P1_20  
-    #endif
-
->>>>>>> fb93042e1c81d99b59b79c0d1d7fb3d1b7235c34
     #define LCD_SDSS                       P0_16  // (16) J3-7 & AUX-4
     #if SD_CONNECTION_IS(LCD)
       #define SD_DETECT_PIN                P1_31  // (49) (NOT 5V tolerant)
