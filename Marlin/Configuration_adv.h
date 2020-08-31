@@ -825,8 +825,8 @@
 
 //#define HOME_AFTER_DEACTIVATE  // Require rehoming after steppers are deactivated
 
-
 #define DEFAULT_MINSEGMENTTIME        20000   // (µs)
+
 
 // Increase the slowdown divisor for larger buffer sizes.
 #define SLOWDOWN
@@ -1776,6 +1776,7 @@
  */
 // #define DIRECT_STEPPING
 
+
 /**
  * G38 Probe Target
  *
@@ -1838,7 +1839,9 @@
 // @section temperature
 
 // Control heater 0 and heater 1 in parallel.
+
 // #define HEATERS_PARALLEL
+
 
 //===========================================================================
 //================================= Buffers =================================
@@ -2509,9 +2512,11 @@
 
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
+
     #define X_STALL_SENSITIVITY  32
     #define X2_STALL_SENSITIVITY X_STALL_SENSITIVITY
     #define Y_STALL_SENSITIVITY  47
+
     #define Y2_STALL_SENSITIVITY Y_STALL_SENSITIVITY
     //#define Z_STALL_SENSITIVITY  8
     //#define Z2_STALL_SENSITIVITY Z_STALL_SENSITIVITY

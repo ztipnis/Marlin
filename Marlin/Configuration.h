@@ -73,7 +73,9 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
+
 #define STRING_CONFIG_H_AUTHOR "(zatipnis, Anycubic Mega Zero w/ SKR, Quickchange, and Heated Bed)" // Who made the changes.
+
 //#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
@@ -134,7 +136,9 @@
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
+
 #define CUSTOM_MACHINE_NAME "Mega One"
+
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4
@@ -427,7 +431,9 @@
 #define TEMP_SENSOR_5 0
 #define TEMP_SENSOR_6 0
 #define TEMP_SENSOR_7 0
+
 #define TEMP_SENSOR_BED 11
+
 #define TEMP_SENSOR_PROBE 0
 #define TEMP_SENSOR_CHAMBER 0
 
@@ -463,7 +469,9 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
+
 #define HEATER_0_MAXTEMP 450
+
 #define HEATER_1_MAXTEMP 260
 #define HEATER_2_MAXTEMP 260
 #define HEATER_3_MAXTEMP 260
@@ -472,6 +480,7 @@
 #define HEATER_6_MAXTEMP 260
 #define HEATER_7_MAXTEMP 260
 #define BED_MAXTEMP      200
+
 
 //===========================================================================
 //============================= PID Settings ================================
@@ -507,10 +516,12 @@
   //#define DEFAULT_Ki 2.25
   //#define DEFAULT_Kd 440
 
+
   // E3d V6 MZ
   #define DEFAULT_Kp 12.37
   #define DEFAULT_Ki 0.67
   #define DEFAULT_Kd 57.46
+
 
 #endif // PIDTEMP
 
@@ -557,10 +568,11 @@
   //#define DEFAULT_bedKi 1.41
   //#define DEFAULT_bedKd 1675.16
 
-  // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
+
   #define DEFAULT_bedKp 122.23
   #define DEFAULT_bedKi 23.87
   #define DEFAULT_bedKd 417.26
+
 
 #endif // PIDTEMPBED
 
@@ -652,8 +664,10 @@
   //#define ENDSTOPPULLUP_ZMAX
   #define ENDSTOPPULLUP_XMIN
   #define ENDSTOPPULLUP_YMIN
+
   #define ENDSTOPPULLUP_ZMIN
   #define ENDSTOPPULLUP_ZMIN_PROBE
+
 #endif
 
 // Enable pulldown for all endstops to prevent a floating state
@@ -672,7 +686,7 @@
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
 #define X_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define Y_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING true // Set to true to invert the logic of the endstop.
 #define X_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define Y_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define Z_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
@@ -916,7 +930,9 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
+
 // #define BLTOUCH
+
 
 /**
  * Pressure sensor with a BLTouch-like interface
@@ -1005,9 +1021,10 @@
  */
 #define NOZZLE_TO_PROBE_OFFSET { 0, 0, 2.075 }
 
+
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 10
+#define PROBING_MARGIN 5
 
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_SPEED (133*60)
@@ -1017,7 +1034,6 @@
 
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 6)
-
 
 /**
  * Multiple Probing
@@ -1144,11 +1160,13 @@
 #define Y_BED_SIZE 220
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
+
 #define X_MIN_POS -12
 #define Y_MIN_POS -51
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE + 25
 #define Y_MAX_POS Y_BED_SIZE - 36
+
 #define Z_MAX_POS 250
 
 /**
@@ -1252,15 +1270,19 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
+
 #define AUTO_BED_LEVELING_BILINEAR
 // #define AUTO_BED_LEVELING_UBL
+
 //#define MESH_BED_LEVELING
 
 /**
  * Normally G28 leaves leveling disabled on completion. Enable
  * this option to have G28 restore the prior leveling state.
  */
+
 #define RESTORE_LEVELING_AFTER_G28 false
+
 
 /**
  * Enable detailed logging of G28, G29, M48, etc.
@@ -1332,6 +1354,7 @@
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
   #define MESH_INSET 25              // Set Mesh bounds as an inset region of the bed
+
   #define GRID_MAX_POINTS_X 7     // Don't use more than 15 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
@@ -1527,7 +1550,9 @@
 
 #define PREHEAT_2_LABEL       "PETG"
 #define PREHEAT_2_TEMP_HOTEND 230
+
 #define PREHEAT_2_TEMP_BED    70
+
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
 #define PREHEAT_3_LABEL       "ABS"
