@@ -142,7 +142,7 @@
 #if TEMP_SENSOR_CHAMBER
   #define CHAMBER_MINTEMP             5
   #define CHAMBER_MAXTEMP            100
-  #define TEMP_CHAMBER_HYSTERESIS     5   // (°C) Temperature proximity considered "close enough" to the target
+  #define TEMP_CHAMBER_HYSTERESIS     30   // (°C) Temperature proximity considered "close enough" to the target
   //#define CHAMBER_LIMIT_SWITCHING
   #define HEATER_CHAMBER_PIN       HEATER_2_PIN   // Chamber heater on/off pin
   #define TEMP_CHAMBER_PIN          TEMP_2_PIN
@@ -476,8 +476,8 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
-#define E1_AUTO_FAN_PIN -1
+// #define E0_AUTO_FAN_PIN -1
+// #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
 #define E4_AUTO_FAN_PIN -1
@@ -2162,7 +2162,7 @@
 #if HAS_DRIVER(TMC26X)
 
   #if AXIS_DRIVER_TYPE_X(TMC26X)
-    #define X_MAX_CURRENT     1000  // (mA)
+    #define X_MAX_CURRENT     1500  // (mA)
     #define X_SENSE_RESISTOR    91  // (mOhms)
     #define X_MICROSTEPS        16  // Number of microsteps
   #endif
@@ -2174,7 +2174,7 @@
   #endif
 
   #if AXIS_DRIVER_TYPE_Y(TMC26X)
-    #define Y_MAX_CURRENT     1000
+    #define Y_MAX_CURRENT     1500
     #define Y_SENSE_RESISTOR    91
     #define Y_MICROSTEPS        16
   #endif
@@ -2186,7 +2186,7 @@
   #endif
 
   #if AXIS_DRIVER_TYPE_Z(TMC26X)
-    #define Z_MAX_CURRENT     1000
+    #define Z_MAX_CURRENT     1500
     #define Z_SENSE_RESISTOR    91
     #define Z_MICROSTEPS        16
   #endif
@@ -2289,7 +2289,7 @@
 
   #if AXIS_IS_TMC(X)
     #define X_CURRENT       800        // (mA) RMS current. Multiply by 1.414 for peak current.
-    #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
+    #define X_CURRENT_HOME  1000  // (mA) RMS current for sensorless homing
     #define X_MICROSTEPS     16        // 0..256
     #define X_RSENSE          0.11
     #define X_CHAIN_POS      -1        // -1..0: Not chained. 1: MCU MOSI connected. 2: Next in chain, ...
@@ -2607,17 +2607,17 @@
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
 
-    #define X_STALL_SENSITIVITY  50
-    #define X2_STALL_SENSITIVITY X_STALL_SENSITIVITY
-    #define Y_STALL_SENSITIVITY  47
+    #define X_STALL_SENSITIVITY 80
+    // #define X2_STALL_SENSITIVITY X_STALL_SENSITIVITY
+    #define Y_STALL_SENSITIVITY  80
 
-    #define Y2_STALL_SENSITIVITY Y_STALL_SENSITIVITY
+    // #define Y2_STALL_SENSITIVITY Y_STALL_SENSITIVITY
     //#define Z_STALL_SENSITIVITY  8
     //#define Z2_STALL_SENSITIVITY Z_STALL_SENSITIVITY
     //#define Z3_STALL_SENSITIVITY Z_STALL_SENSITIVITY
     //#define Z4_STALL_SENSITIVITY Z_STALL_SENSITIVITY
     //#define SPI_ENDSTOPS              // TMC2130 only
-    #define IMPROVE_HOMING_RELIABILITY
+    // #define IMPROVE_HOMING_RELIABILITY
   #endif
 
   /**
@@ -2636,7 +2636,7 @@
    * Beta feature!
    * Create a 50/50 square wave step pulse optimal for stepper drivers.
    */
-  #define SQUARE_WAVE_STEPPING
+  // #define SQUARE_WAVE_STEPPING
 
   /**
    * Enable M122 debugging command for TMC stepper drivers.
