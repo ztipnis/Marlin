@@ -357,6 +357,8 @@
   #error "LEVEL_CORNERS_INSET is now LEVEL_CORNERS_INSET_LFRB."
 #elif ENABLED(LEVEL_BED_CORNERS) && !defined(LEVEL_CORNERS_INSET_LFRB)
   #error "LEVEL_BED_CORNERS requires LEVEL_CORNERS_INSET_LFRB values."
+#elif BOTH(LEVEL_CORNERS_USE_PROBE, SENSORLESS_PROBING)
+  #error "LEVEL_CORNERS_USE_PROBE is incompatible with SENSORLESS_PROBING."
 #elif defined(BEZIER_JERK_CONTROL)
   #error "BEZIER_JERK_CONTROL is now S_CURVE_ACCELERATION."
 #elif HAS_JUNCTION_DEVIATION && defined(JUNCTION_DEVIATION_FACTOR)
@@ -525,8 +527,12 @@
   #error "EVENT_GCODE_SD_STOP is now EVENT_GCODE_SD_ABORT."
 #elif defined(GRAPHICAL_TFT_ROTATE_180)
   #error "GRAPHICAL_TFT_ROTATE_180 is now TFT_ROTATION set to TFT_ROTATE_180."
+#elif defined(PROBE_OFFSET_START)
+  #error "PROBE_OFFSET_START is now PROBE_OFFSET_WIZARD_START_Z."
 #elif defined(POWER_LOSS_PULL)
   #error "POWER_LOSS_PULL is now specifically POWER_LOSS_PULL(UP|DOWN)."
+#elif defined(SHORT_MANUAL_Z_MOVE)
+  #error "SHORT_MANUAL_Z_MOVE is now FINE_MANUAL_MOVE, applying to Z on most printers."
 #elif defined(FIL_RUNOUT_INVERTING)
   #if FIL_RUNOUT_INVERTING
     #error "FIL_RUNOUT_INVERTING true is now FIL_RUNOUT_STATE HIGH."
@@ -1345,25 +1351,26 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
     #error "Z_MIN_PROBE_PIN must be defined if Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN is not enabled."
   #endif
 
+  /**
+   * Check for improper NOZZLE_TO_PROBE_OFFSET
+   */
+  constexpr xyz_pos_t sanity_nozzle_to_probe_offset = NOZZLE_TO_PROBE_OFFSET;
   #if ENABLED(NOZZLE_AS_PROBE)
-    constexpr float sanity_nozzle_to_probe_offset[] = NOZZLE_TO_PROBE_OFFSET;
-    static_assert(sanity_nozzle_to_probe_offset[0] == 0.0 && sanity_nozzle_to_probe_offset[1] == 0.0,
-                  "NOZZLE_AS_PROBE requires the X,Y offsets in NOZZLE_TO_PROBE_OFFSET to be 0,0.");
-  #endif
-
-  #if DISABLED(NOZZLE_AS_PROBE)
-    static_assert(PROBING_MARGIN >= 0, "PROBING_MARGIN must be >= 0.");
-    static_assert(PROBING_MARGIN_BACK >= 0, "PROBING_MARGIN_BACK must be >= 0.");
+    static_assert(sanity_nozzle_to_probe_offset.x == 0 && sanity_nozzle_to_probe_offset.y == 0,
+                  "NOZZLE_AS_PROBE requires the XY offsets in NOZZLE_TO_PROBE_OFFSET to both be 0.");
+  #else
+    static_assert(PROBING_MARGIN       >= 0, "PROBING_MARGIN must be >= 0.");
+    static_assert(PROBING_MARGIN_BACK  >= 0, "PROBING_MARGIN_BACK must be >= 0.");
     static_assert(PROBING_MARGIN_FRONT >= 0, "PROBING_MARGIN_FRONT must be >= 0.");
-    static_assert(PROBING_MARGIN_LEFT >= 0, "PROBING_MARGIN_LEFT must be >= 0.");
+    static_assert(PROBING_MARGIN_LEFT  >= 0, "PROBING_MARGIN_LEFT must be >= 0.");
     static_assert(PROBING_MARGIN_RIGHT >= 0, "PROBING_MARGIN_RIGHT must be >= 0.");
   #endif
 
   #define _MARGIN(A) TERN(IS_SCARA, SCARA_PRINTABLE_RADIUS, TERN(DELTA, DELTA_PRINTABLE_RADIUS, ((A##_BED_SIZE) / 2)))
-  static_assert(PROBING_MARGIN < _MARGIN(X), "PROBING_MARGIN is too large.");
-  static_assert(PROBING_MARGIN_BACK < _MARGIN(Y), "PROBING_MARGIN_BACK is too large.");
+  static_assert(PROBING_MARGIN       < _MARGIN(X), "PROBING_MARGIN is too large.");
+  static_assert(PROBING_MARGIN_BACK  < _MARGIN(Y), "PROBING_MARGIN_BACK is too large.");
   static_assert(PROBING_MARGIN_FRONT < _MARGIN(Y), "PROBING_MARGIN_FRONT is too large.");
-  static_assert(PROBING_MARGIN_LEFT < _MARGIN(X), "PROBING_MARGIN_LEFT is too large.");
+  static_assert(PROBING_MARGIN_LEFT  < _MARGIN(X), "PROBING_MARGIN_LEFT is too large.");
   static_assert(PROBING_MARGIN_RIGHT < _MARGIN(X), "PROBING_MARGIN_RIGHT is too large.");
   #undef _MARGIN
 
@@ -1438,7 +1445,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
     #error "AUTO_BED_LEVELING_UBL requires EEPROM_SETTINGS."
   #elif !WITHIN(GRID_MAX_POINTS_X, 3, 15) || !WITHIN(GRID_MAX_POINTS_Y, 3, 15)
     #error "GRID_MAX_POINTS_[XY] must be a whole number between 3 and 15."
-  #elif !defined(RESTORE_LEVELING_AFTER_G28)
+  #elif !defined(RESTORE_LEVELING_AFTER_G28) && !defined(ENABLE_LEVELING_AFTER_G28)
     #error "AUTO_BED_LEVELING_UBL used to enable RESTORE_LEVELING_AFTER_G28. To keep this behavior enable RESTORE_LEVELING_AFTER_G28. Otherwise define it as 'false'."
   #endif
 
@@ -1464,6 +1471,10 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
     #error "GRID_MAX_POINTS_X and GRID_MAX_POINTS_Y must be less than 10 for MBL."
   #endif
 
+#endif
+
+#if ALL(HAS_LEVELING, RESTORE_LEVELING_AFTER_G28, ENABLE_LEVELING_AFTER_G28)
+  #error "Only enable RESTORE_LEVELING_AFTER_G28 or ENABLE_LEVELING_AFTER_G28, but not both."
 #endif
 
 #if HAS_MESH && HAS_CLASSIC_JERK
@@ -1594,7 +1605,7 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
  * Allen Key
  * Deploying the Allen Key probe uses big moves in z direction. Too dangerous for an unhomed z-axis.
  */
-#if ENABLED(Z_PROBE_ALLEN_KEY) && (Z_HOME_DIR < 0) && ENABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+#if BOTH(Z_PROBE_ALLEN_KEY, Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN) && (Z_HOME_DIR < 0)
   #error "You can't home to a Z min endstop with a Z_PROBE_ALLEN_KEY."
 #endif
 
@@ -2006,6 +2017,8 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
   #error "Enable USE_ZMIN_PLUG when homing Z to MIN."
 #elif Z_HOME_DIR > 0 && ENABLED(USE_PROBE_FOR_Z_HOMING)
   #error "Z_HOME_DIR must be -1 when homing Z with the probe."
+#elif BOTH(HOMING_Z_WITH_PROBE, Z_MULTI_ENDSTOPS)
+  #error "Z_MULTI_ENDSTOPS is incompatible with USE_PROBE_FOR_Z_HOMING."
 #elif Z_HOME_DIR > 0 && DISABLED(USE_ZMAX_PLUG)
   #error "Enable USE_ZMAX_PLUG when homing Z to MAX."
 #endif
@@ -2647,6 +2660,10 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
 #if ENABLED(SENSORLESS_PROBING)
   #if ENABLED(DELTA) && !(X_SENSORLESS && Y_SENSORLESS && Z_SENSORLESS)
     #error "SENSORLESS_PROBING for DELTA requires TMC stepper drivers with StallGuard on X, Y, and Z axes."
+  #elif ENABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+    #error "SENSORLESS_PROBING cannot be used with Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN."
+  #elif ENABLED(USE_PROBE_FOR_Z_HOMING)
+    #error "SENSORLESS_PROBING cannot be used with USE_PROBE_FOR_Z_HOMING."
   #elif !Z_SENSORLESS
     #error "SENSORLESS_PROBING requires a TMC stepper driver with StallGuard on Z."
   #endif
