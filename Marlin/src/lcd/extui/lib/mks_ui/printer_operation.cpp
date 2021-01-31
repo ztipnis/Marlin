@@ -27,6 +27,7 @@
 #include <lv_conf.h>
 
 #include "../../../../gcode/gcode.h"
+#include "../../../../module/temperature.h"
 #include "../../../../module/planner.h"
 #include "../../../../module/motion.h"
 #include "../../../../sd/cardreader.h"

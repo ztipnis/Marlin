@@ -595,16 +595,15 @@ void restore_feedrate_and_scaling() {
       // Software endstops are relative to the tool 0 workspace, so
       // the movement limits must be shifted by the tool offset to
       // retain the same physical limit when other tools are selected.
-
-      if (new_tool_index == old_tool_index || axis == Z_AXIS) { // The Z axis is "special" and shouldn't be modified
-        const float offs = (axis == Z_AXIS) ? 0 : hotend_offset[active_extruder][axis];
-        soft_endstop.min[axis] = base_min_pos(axis) + offs;
-        soft_endstop.max[axis] = base_max_pos(axis) + offs;
+      if (old_tool_index != new_tool_index) {
+        const float offs = hotend_offset[new_tool_index][axis] - hotend_offset[old_tool_index][axis];
+        soft_endstop.min[axis] += offs;
+        soft_endstop.max[axis] += offs;
       }
       else {
-        const float diff = hotend_offset[new_tool_index][axis] - hotend_offset[old_tool_index][axis];
-        soft_endstop.min[axis] += diff;
-        soft_endstop.max[axis] += diff;
+        const float offs = hotend_offset[active_extruder][axis];
+        soft_endstop.min[axis] = base_min_pos(axis) + offs;
+        soft_endstop.max[axis] = base_max_pos(axis) + offs;
       }
 
     #else
